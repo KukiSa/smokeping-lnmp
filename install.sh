@@ -88,7 +88,7 @@ configure() {
 	ip=$(curl -sL https://api64.ipify.org -4) || error=1
 	[[ $error ]] && echo "获取本机 IP 地址失败" && exit 1
 	wget $origin/tcpping -O /usr/bin/tcpping && chmod +x /usr/bin/tcpping
-	cat > $nginx_dir/$domain.conf <<EOF
+	cat > $nginx_conf_dir/$domain.conf <<EOF
 server {
 	listen 80;
 	listen [::]:80;
