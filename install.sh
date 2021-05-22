@@ -93,7 +93,7 @@ server {
 	server_name $domain;
 	index index.html index.htm smokeping.fcgi;
 	root /usr/local/smokeping/htdocs/;
-	\#error_page 404/404.html;
+	#error_page 404/404.html;
 	
 	location ~ .*\.fcgi\$ {
 		fastcgi_pass 127.0.0.1:9007;
