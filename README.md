@@ -1,8 +1,8 @@
 # SmokePing 一键脚本 for 宝塔/LNMP
 
-[SmokePing](https://oss.oetiker.ch/smokeping) 是由 [RRDtool](https://oss.oetiker.ch/rrdtool) 的作者 [Tobi Oetiker](https://www.oetiker.ch) 开发的一款监控网络状态和稳定性的开源软件。SmokePing 会向目标设备和系统发送各种类型的测试数据包，并对其进行测量和记录，通过 RRDtool 制图方式图形化地展示网络的延迟情况，进而帮助我们清楚、更直观地了解监控机和目标之间短期和长期的网络状况。
+[SmokePing](https://oss.oetiker.ch/smokeping) 是由 [RRDtool](https://oss.oetiker.ch/rrdtool) 的作者 [Tobi Oetiker](https://www.oetiker.ch) 开发的一款监控网络状态和稳定性的开源软件。SmokePing 会不断向目标发送各种类型的数据包，并对返回值进行测量和记录，通过 RRDtool 制图程序图形化地展示在各个时段内网络的延迟和丢包情况，帮助我们更清楚、更直观地了解监控机和监控目标之间短期和长期的网络状况。
 
-本项目旨在使 SmokePing 运行在 [Nginx](https://nginx.org) 上而非大部分教程指导的运行在 [Apache 2](https://httpd.apache.org) 上，力促在已经安装 Web 服务的系统对原有环境无损的情况下快速地部署 SmokePing 进行监控。
+本项目旨在使 SmokePing 运行在 [Nginx](https://nginx.org) 上而非大部分教程指导的运行在 [Apache 2](https://httpd.apache.org) 上并在已经安装 Web 服务的系统上对原有环境无损的情况下快速地部署 SmokePing 进行监控。
 
 初步支持[宝塔](https://bt.cn)和 [LNMP.org](https://lnmp.org) 一键包安装的以 Nginx 为最前端的环境。 
 
@@ -21,5 +21,17 @@
 2. 执行 `bash -c "$(curl -L https://github.com/KukiSa/smokeping-lnmp/raw/main/install.sh)"`，根据提示操作。
 3. 脚本执行完成后，可以按需修改网站的配置文件。
 
+## 常见问题
+### `epel/x86_64` 错误
+常见于 Amazon Linux 2 (AMI)，因 AWS 与 fedoraproject.org 之间随机存在连通性问题，而 Amazon Linux 2 官方指导[\[1\]](https://aws.amazon.com/cn/premiumsupport/knowledge-center/ec2-enable-epel)[\[2\]](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/add-repositories.html)中指示使用 `amazon-linux-extras install epel -y` 命令或 `yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm` 命令安装的 ELRepo 源均以 fedoraproject.org 为 Baseurl 或 Metalink 终结点。
+
+**解决方案：** 更换非 Amazon Linux 2 系统。
+
+### 中文显示异常
+常见于 Debian 或 Ubuntu，可能因系统精简掉了中文字体。
+
+**解决方案：** 执行 `apt-get install -y wqy-zenhei-fonts`。
+
+
 ## SmokePing 配置
-SmokePing 主配置文件（包括目标节点）为 `/usr/local/smokeping/etc/config`，此文件的结构及其修改请查阅相关教程。
+SmokePing 主配置文件（包括目标节点）为 `/usr/local/smokeping/etc/config`，此文件的结构及其修改请查阅相关教程，附上[官方 Examples](https://oss.oetiker.ch/smokeping/doc/smokeping_examples.en.html)。
