@@ -87,7 +87,7 @@ configure() {
 server {
 	listen 80;
 	listen [::]:80;
-	listen 9006;
+	listen 127.0.0.1:9006;
 	server_name $domain;
 	index index.html index.htm smokeping.fcgi;
 	root /usr/local/smokeping/htdocs/;
