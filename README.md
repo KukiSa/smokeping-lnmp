@@ -27,5 +27,10 @@
 
 **解决方案：** 更换非 Amazon Linux 2 系统。
 
+### `Unit smokeping.services not found`
+SmokePing 的 systemd 文件未被写入 `/usr/lib/systemd/system`。
+
+**解决方案：** 执行 `wget https://raw.githubusercontent.com/KukiSa/smokeping-lnmp/main/systemd -O /etc/systemd/system/smokeping.service && systemctl daemon-reload && systemctl enable smokeping`。
+
 ## SmokePing 配置
-SmokePing 主配置文件（包括目标节点）为 `/usr/local/smokeping/etc/config`，此文件的结构及其修改请查阅相关教程，附上[官方 Examples](https://oss.oetiker.ch/smokeping/doc/smokeping_examples.en.html)。
+SmokePing 主配置文件（包括目标节点）为 `/usr/local/smokeping/etc/config`，此文件的结构及其修改请查阅相关教程，附上[示例](https://oss.oetiker.ch/smokeping/doc/smokeping_examples.en.html)。
