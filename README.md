@@ -32,5 +32,10 @@ SmokePing 的 systemd 文件未被写入 `/usr/lib/systemd/system`。
 
 **解决方案：** 执行 `wget https://raw.githubusercontent.com/KukiSa/smokeping-lnmp/main/systemd -O /etc/systemd/system/smokeping.service && systemctl daemon-reload && systemctl enable smokeping`。
 
+### `Net-SSLeay` 编译失败
+常见于 Amazon Lightsail 的 Debian 机器上，初步判断为 AWS Debian 模板 perl 组件的固有缺陷。
+
+**解决方案：** 更换为 Amazon Linux 2, CentOS 或 Ubuntu，能力较强的使用者可以选择在本机重新安装 Debian。
+
 ## SmokePing 配置
 SmokePing 主配置文件（包括目标节点）为 `/usr/local/smokeping/etc/config`，此文件的结构及其修改请查阅相关教程，附上[示例](https://oss.oetiker.ch/smokeping/doc/smokeping_examples.en.html)。
