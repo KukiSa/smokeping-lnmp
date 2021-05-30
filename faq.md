@@ -19,7 +19,7 @@ SmokePing 的 systemd 文件未被写入 `/usr/lib/systemd/system`。
 ### 报错：`we did not get the config from the master`
 Slave 模式下的 SmokePing 与 Master 模式下的 SmokePing 通信失败，一般为防火墙阻止。
 
-**解决方案：** 本机防火墙放行 9008 端口。
+**解决方案：** 本机防火墙放行 9006 端口。
 
 ### 一直没有记录数据
 请等待至少 30 分钟，若仍旧无数据，请执行 `systemctl status smokeping`。若发现输出有前述报错，请照前款解决方案。
