@@ -22,20 +22,4 @@
 3. 脚本执行完成后，可以按需修改网站的配置文件。
 
 ## 常见问题
-### `epel/x86_64` 错误
-常见于 Amazon Linux 2 (AMI)，因 AWS 与 fedoraproject.org 之间随机存在连通性问题，而 Amazon Linux 2 官方指导[\[1\]](https://aws.amazon.com/cn/premiumsupport/knowledge-center/ec2-enable-epel)[\[2\]](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/add-repositories.html)中指示使用 `amazon-linux-extras install epel -y` 命令或 `yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm` 命令安装的 ELRepo 源均以 fedoraproject.org 为 Baseurl 或 Metalink 终结点。
-
-**解决方案：** 更换非 Amazon Linux 2 系统。
-
-### `Unit smokeping.services not found`
-SmokePing 的 systemd 文件未被写入 `/usr/lib/systemd/system`。
-
-**解决方案：** 执行 `wget https://raw.githubusercontent.com/KukiSa/smokeping-lnmp/main/systemd -O /etc/systemd/system/smokeping.service && systemctl daemon-reload && systemctl enable smokeping`。
-
-### `Net-SSLeay` 编译失败
-常见于 Amazon Lightsail 的 Debian 机器上，初步判断为 AWS Debian 模板 perl 组件的固有缺陷。
-
-**解决方案：** 更换为 Amazon Linux 2, CentOS 或 Ubuntu，能力较强的使用者可以选择在本机重新安装 Debian。
-
-## SmokePing 配置
-SmokePing 主配置文件（包括目标节点）为 `/usr/local/smokeping/etc/config`，此文件的结构及其修改请查阅相关教程，附上[示例](https://oss.oetiker.ch/smokeping/doc/smokeping_examples.en.html)。
+请查看 [FAQ](https://github.com/KukiSa/smokeping-lnmp/blob/main/faq.md)。
