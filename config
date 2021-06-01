@@ -27,7 +27,7 @@ comment = loss 3 times  in a row
 *** Database ***
 
 step     = 300
-pings    = 20
+pings    = 10
 
 
 AVERAGE  0.5   1  1008
@@ -69,11 +69,11 @@ unison_tolerance = 2
 *** Probes ***
 
 + TCPPing
-binary = /usr/bin/tcpping
+binary = /usr/bin/tcpping-sp
 forks = 5
 offset = 50%
 step = 300
-timeout = 1
+timeout = 5
 
 
 *** Slaves ***

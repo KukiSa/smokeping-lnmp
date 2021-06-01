@@ -64,7 +64,8 @@ get_info() {
 }
 
 compile_smokeping() {
-	rm -rf /tmp/smokeping
+	[[ -e /usr/local/smokeping ]] && rm -rf /usr/local/smokeping
+	[[ -e /tmp/smokeping ]] && rm -rf /tmp/smokeping
 	mkdir -p /tmp/smokeping
 	cd /tmp/smokeping
 	wget https://oss.oetiker.ch/smokeping/pub/smokeping-2.7.3.tar.gz
@@ -75,14 +76,14 @@ compile_smokeping() {
 		ln -s $(type -P make) /usr/bin/gmake
 	fi
 	make install || gmake install
-	[[ ! -f /usr/local/smokeping/bin/smokeping ]] && echo "编译 SmokePing 失败" && exit 1
+	[[ ! -e /usr/local/smokeping/bin/smokeping ]] && echo "编译 SmokePing 失败" && exit 1
 }
 
 configure() {
 	origin="https://github.com/KukiSa/smokeping-lnmp/raw/main"
 	ip=$(curl -sL https://api64.ipify.org -4) || error=1
 	[[ $error ]] && echo "获取本机 IP 地址失败" && exit 1
-	wget $origin/tcpping -O /usr/bin/tcpping && chmod +x /usr/bin/tcpping
+	wget $origin/tcpping-sp -O /usr/bin/tcpping-sp && chmod +x /usr/bin/tcpping-sp
 	cat > $nginx_conf_dir/$domain.conf <<EOF
 server {
 	listen 80;

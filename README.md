@@ -22,4 +22,6 @@
 3. 脚本执行完成后，可以按需修改网站的配置文件。
 
 ## 常见问题
-请查看 [FAQ](https://github.com/KukiSa/smokeping-lnmp/blob/main/faq.md)。
+脚本预置了 [jiuqi9997/smokeping](https://github.com/jiuqi9997/smokeping) 的配置，可以自行按需修改。
+SmokePing 主配置文件（包括目标节点）为 `/usr/local/smokeping/etc/config`，此文件的结构及其修改请查阅相关教程，附上[示例](https://oss.oetiker.ch/smokeping/doc/smokeping_examples.en.html)。
+更多问题请查看 [FAQ](https://github.com/KukiSa/smokeping-lnmp/blob/main/faq.md)。
