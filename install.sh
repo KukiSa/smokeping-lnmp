@@ -58,8 +58,8 @@ get_info() {
 	read -rp "输入服务器名称（如 香港）:" name
 	read -rp "输入服务器代号（如 HK）:" code
 	read -rp "输入通信密钥（不限长度）:" sec
-	read -rp "输入 Nginx 站点配置目录（宝塔为 /www/server/panel/vhost/nginx, LNMP.org 为 /usr/local/nginx/conf/vhost）:" nginx_conf_dir
-	read -rp "输入 Nginx fastcgi_params 目录（宝塔为 /www/server/nginx/conf, LNMP.org 为 /usr/local/nginx/conf）:" nginx_fastcgi
+	read -rp "输入 Nginx 站点配置目录:" nginx_conf_dir
+	read -rp "输入 Nginx fastcgi_params 目录:" nginx_fastcgi
 	read -rp "输入域名:" domain
 }
 
