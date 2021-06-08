@@ -68,7 +68,7 @@ compile_smokeping() {
 	[[ -e /tmp/smokeping ]] && rm -rf /tmp/smokeping
 	mkdir -p /tmp/smokeping
 	cd /tmp/smokeping
-	wget https://oss.oetiker.ch/smokeping/pub/smokeping-2.7.3.tar.gz
+	wget https://github.com/oetiker/SmokePing/releases/download/2.7.3/smokeping-2.7.3.tar.gz
 	tar xzvf smokeping-2.7.3.tar.gz
 	cd smokeping-2.7.3
 	./configure --prefix=/usr/local/smokeping
