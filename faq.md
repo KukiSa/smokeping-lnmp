@@ -8,7 +8,7 @@
 ### `Unit smokeping.services not found`
 SmokePing 的 systemd 文件未被写入 `/usr/lib/systemd/system`。
 
-**解决方案：** 执行 `wget https://raw.githubusercontent.com/KukiSa/smokeping/main/systemd -O /etc/systemd/system/smokeping.service && systemctl daemon-reload && systemctl enable smokeping`。
+**解决方案：** 执行 `wget https://raw.githubusercontent.com/KukiSa/smokeping-lnmp/main/systemd -O /etc/systemd/system/smokeping.service && systemctl daemon-reload && systemctl enable smokeping`。
 
 ### `Net-SSLeay` 编译失败
 常见于 Amazon Lightsail 的 Debian 机器上，初步判断为 Debian 模板因 SWAP 分区默认未分配导致编译器运行异常。
@@ -27,7 +27,7 @@ Slave 模式下的 SmokePing 与 Master 模式下的 SmokePing 通信失败，�
 ### 配置 SSL 后网站显示“您的连接并非完全安全”
 SmokePing 前端将会引用 SmokePing 配置文件中的 `cgiurl`，此项默认为 HTTP。
 
-**解决方案：** 修改 `/usr/local/smokeping/etc/config` 第 10 行 `cgiurl   = http://`，将 `http://` 改为 `https://`。
+**解决方案：** 修改 `/usr/local/smokeping/etc/config` 第 10 行 `cgiurl   = http://`，将 `http://` 改为 `https://` 并执行 `systemctl restart smokeping` 以应用。
 
 ## 定制主从分离
 ### 将本机作为从端，将主端改至其他机器上
