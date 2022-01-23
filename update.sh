@@ -23,8 +23,12 @@ configure() {
 	sed -i 's/port1/'${port1}'/g;s/port2/'${port2}'/g' /etc/systemd/system/smokeping-slave.service /etc/systemd/system/spawn-fcgi.service
 	sed -i 's/SLAVE_CODE/'$code'/g' /usr/local/smokeping/etc/config /etc/systemd/system/smokeping-slave.service
 	sed -i 's/SLAVE_NAME/'$name'/g' /usr/local/smokeping/etc/config
-	rm -rf /usr/local/smokeping/htdocs/cache
-	rm -rf /usr/local/smokeping/htdocs/data
+	systemctl disable smokeping
+	rm -rf /etc/systemd/system/smokeping.service
+	systemctl daemon-reload
+	systemctl enable caddy-sp spawn-fcgi smokeping-master smokeping-slave
+	rm -rf /usr/local/smokeping/htdocs/cache/*
+	rm -rf /usr/local/smokeping/htdocs/data/*
 }
 
 get_info
