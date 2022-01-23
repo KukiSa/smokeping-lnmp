@@ -126,6 +126,8 @@ EOF
 	sed -i 's/some.url/'$domain'/g' /usr/local/smokeping/etc/config
 	sed -i 's/SLAVE_CODE/'$code'/g' /usr/local/smokeping/etc/config /etc/systemd/system/smokeping-slave.service
 	sed -i 's/SLAVE_NAME/'$name'/g' /usr/local/smokeping/etc/config
+	systemctl daemon-reload
+	systemctl enable spawn-fcgi smokeping-master smokeping-slave
 	echo "$code:$sec" > /usr/local/smokeping/etc/smokeping_secrets.dist
 	echo "$sec" > /usr/local/smokeping/etc/secrets
 	chmod 700 /usr/local/smokeping/etc/secrets /usr/local/smokeping/etc/smokeping_secrets.dist
@@ -136,7 +138,6 @@ EOF
 	../bin/smokeping --debug || error=1
 	[[ $error -eq 1 ]] && echo "测试运行失败！" && exit 1
 }
-
 
 
 get_info
