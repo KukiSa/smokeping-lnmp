@@ -4,12 +4,10 @@ export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 stty erase ^?
 
 install_packages() {
-	rpm_packages="nc"
-	apt_packages="netcat"
 	if [[ $ID == "debian" || $ID == "ubuntu" ]]; then
-		$INS $apt_packages
+		apt-get install -y netcat
 	elif [[ $ID == "centos" || $ID == "amzn" || $ID == "ol" ]]; then
-		$INS $rpm_packages
+		yum install -y nc
 	fi
 }
 
@@ -17,15 +15,13 @@ get_info() {
 	read -rp "请输入服务器名称（如 香港）:" name
 	tail -n 3 /usr/local/smokeping/etc/config
 	read -rp "请输入 slaves = 的字符:" code
-	port1=9006
-	port2=9007
+	port1="9006"
+	port2="9007"
 }
 
 configure() {
 	origin="https://github.com/KukiSa/smokeping-lnmp/raw/main"
 	wget $origin/tcpping-sp -O /usr/bin/tcpping-sp && chmod +x /usr/bin/tcpping-sp
-
-	nginx -s reload
 	wget $origin/config -O /usr/local/smokeping/etc/config
 	wget $origin/systemd-fcgi -O /etc/systemd/system/spawn-fcgi.service
 	wget $origin/systemd-master -O /etc/systemd/system/smokeping-master.service
