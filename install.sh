@@ -4,8 +4,8 @@ export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 stty erase ^?
 
 install_packages() {
-	rpm_packages="tar zip unzip openssl openssl-devel lsof git jq socat crontabs make gcc rrdtool rrdtool-perl perl-core spawn-fcgi traceroute zlib zlib-devel wqy-zenhei-fonts"
-	apt_packages="tar zip unzip openssl libssl-dev lsof git jq socat cron make gcc rrdtool librrds-perl spawn-fcgi traceroute zlib1g zlib1g-dev fonts-droid-fallback"
+	rpm_packages="tar zip unzip openssl openssl-devel lsof git jq socat crontabs make gcc rrdtool rrdtool-perl perl-core spawn-fcgi traceroute zlib zlib-devel wqy-zenhei-fonts nc"
+	apt_packages="tar zip unzip openssl libssl-dev lsof git jq socat cron make gcc rrdtool librrds-perl spawn-fcgi traceroute zlib1g zlib1g-dev fonts-droid-fallback netcat"
 	if [[ $ID == "debian" || $ID == "ubuntu" ]]; then
 		$PM update
 		$INS wget curl gnupg2 ca-certificates dmidecode lsb-release
@@ -61,6 +61,20 @@ get_info() {
 	read -rp "输入 Nginx 站点配置目录:" nginx_conf_dir
 	read -rp "输入 Nginx fastcgi_params 目录:" nginx_fastcgi
 	read -rp "输入域名:" domain
+	read -rp "输入内部输出端口（默认 9006）：" port1
+	[ -z "$port1" ] && port1="9006"
+	testport=$port1 && port_test
+	read -rp "输入 FCGI 监听端口（默认 9007）：" port2
+	[ -z "$port2" ] && port2="9007"
+	testport=$port1 && port_test
+}
+
+port_test() {
+  	if [[ $testport -le 0 ]] || [[ $testport -gt 65535 ]]; then
+    		print_error "请输入 0-65535 之间的值"
+    		exit 1
+  	fi
+  	ss -tnlp | grep -q ":${testport} " && echo "端口 ${testport} 已被占用" && exit 1
 }
 
 compile_smokeping() {
@@ -82,20 +96,20 @@ compile_smokeping() {
 configure() {
 	origin="https://github.com/KukiSa/smokeping-lnmp/raw/main"
 	ip=$(curl -sL https://api64.ipify.org -4) || error=1
-	[[ $error ]] && echo "获取本机 IP 地址失败" && exit 1
+	[[ $error -eq 1 ]] && echo "获取本机 IP 地址失败" && exit 1
 	wget $origin/tcpping-sp -O /usr/bin/tcpping-sp && chmod +x /usr/bin/tcpping-sp
 	cat > $nginx_conf_dir/$domain.conf <<EOF
 server {
 	listen 80;
 	listen [::]:80;
-	listen 127.0.0.1:9006;
+	listen 127.0.0.1:$port1;
 	server_name $domain;
 	index index.html index.htm smokeping.fcgi;
 	root /usr/local/smokeping/htdocs/;
 	#error_page 404/404.html;
 	
 	location ~ .*\.fcgi\$ {
-		fastcgi_pass 127.0.0.1:9007;
+		fastcgi_pass 127.0.0.1:$port2;
 		include $nginx_fastcgi/fastcgi_params;
 	}
 
@@ -105,12 +119,13 @@ server {
 EOF
 	nginx -s reload
 	wget $origin/config -O /usr/local/smokeping/etc/config
-	wget $origin/systemd -O /etc/systemd/system/smokeping.service && systemctl enable smokeping
-	wget $origin/slave.sh -O /usr/local/smokeping/bin/slave.sh
+	wget $origin/systemd-fcgi -O /etc/systemd/system/spawn-fcgi.service
+	wget $origin/systemd-master -O /etc/systemd/system/smokeping-master.service
+	wget $origin/systemd-slave -O /etc/systemd/system/smokeping-slave.service
+	sed -i 's/port1/'${port1}'/g;s/port2/'${port2}'/g' /etc/systemd/system/smokeping-slave.service /etc/systemd/system/spawn-fcgi.service
 	sed -i 's/some.url/'$domain'/g' /usr/local/smokeping/etc/config
-	sed -i 's/SLAVE_CODE/'$code'/g' /usr/local/smokeping/etc/config /usr/local/smokeping/bin/slave.sh
+	sed -i 's/SLAVE_CODE/'$code'/g' /usr/local/smokeping/etc/config /etc/systemd/system/smokeping-slave.service
 	sed -i 's/SLAVE_NAME/'$name'/g' /usr/local/smokeping/etc/config
-	sed -i 's/MASTER_IP/'$ip'/g' /usr/local/smokeping/bin/slave.sh
 	echo "$code:$sec" > /usr/local/smokeping/etc/smokeping_secrets.dist
 	echo "$sec" > /usr/local/smokeping/etc/secrets
 	chmod 700 /usr/local/smokeping/etc/secrets /usr/local/smokeping/etc/smokeping_secrets.dist
@@ -119,7 +134,7 @@ EOF
 	mkdir -p data var cache ../cache
 	mv smokeping.fcgi.dist smokeping.fcgi
 	../bin/smokeping --debug || error=1
-	[[ $error ]] && echo "测试运行失败！" && exit 1
+	[[ $error -eq 1 ]] && echo "测试运行失败！" && exit 1
 }
 
 
@@ -129,10 +144,8 @@ install_packages
 compile_smokeping
 configure
 
-systemctl start smokeping
-sleep 3
-systemctl status smokeping | grep -q 'TCPPing' || error=1
-[[ $error ]] && echo "启动失败" && exit 1
+systemctl start spawn-fcgi smokeping-master smokeping-slave || error=1
+[[ $error -eq 1 ]] && echo "启动失败" && exit 1
 
 rm -rf /tmp/smokeping
 
