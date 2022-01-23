@@ -3,6 +3,16 @@
 export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 stty erase ^?
 
+install_packages() {
+	rpm_packages="nc"
+	apt_packages="netcat"
+	if [[ $ID == "debian" || $ID == "ubuntu" ]]; then
+		$INS $apt_packages
+	elif [[ $ID == "centos" || $ID == "amzn" || $ID == "ol" ]]; then
+		$INS $rpm_packages
+	fi
+}
+
 get_info() {
 	read -rp "请输入服务器名称（如 香港）:" name
 	tail -n 3 /usr/local/smokeping/etc/config
@@ -31,6 +41,7 @@ configure() {
 	rm -rf /usr/local/smokeping/htdocs/data/*
 }
 
+install_packages
 get_info
 configure
 
