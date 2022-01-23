@@ -21,6 +21,12 @@
 2. 执行 `bash -c "$(curl -L https://github.com/KukiSa/smokeping-lnmp/raw/main/install.sh)"`，Nginx 站点配置文件目录为 `/usr/local/nginx/conf/vhost`；Nginx fastcgi_params 目录为 `/usr/local/nginx/conf`。
 3. 脚本执行完成后，可以按需修改网站的配置文件。
 
+## 升级
+```
+bash -c "$(curl -L https://github.com/KukiSa/smokeping-lnmp/raw/main/update.sh)
+```
+升级将清除所有数据。
+
 ## 常见问题
 脚本预置了 [jiuqi9997/smokeping](https://github.com/jiuqi9997/smokeping) 的配置，可以自行按需修改。
 
