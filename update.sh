@@ -32,7 +32,7 @@ configure() {
 	systemctl disable smokeping
 	rm -rf /etc/systemd/system/smokeping.service
 	systemctl daemon-reload
-	systemctl enable caddy-sp spawn-fcgi smokeping-master smokeping-slave
+	systemctl enable spawn-fcgi smokeping-master smokeping-slave
 	rm -rf /usr/local/smokeping/htdocs/cache/*
 	rm -rf /usr/local/smokeping/htdocs/data/*
 }
