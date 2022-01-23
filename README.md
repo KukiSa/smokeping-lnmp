@@ -23,7 +23,7 @@
 
 ## 升级
 ```
-bash -c "$(curl -L https://github.com/KukiSa/smokeping-lnmp/raw/main/update.sh)
+bash -c "$(curl -L https://github.com/KukiSa/smokeping-lnmp/raw/main/update.sh)"
 ```
 升级将清除所有数据。
 
