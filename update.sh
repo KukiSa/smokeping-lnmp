@@ -4,6 +4,7 @@ export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 stty erase ^?
 
 install_packages() {
+	source /etc/os-release || source /usr/lib/os-release || exit 1
 	if [[ $ID == "debian" || $ID == "ubuntu" ]]; then
 		apt-get install -y netcat
 	elif [[ $ID == "centos" || $ID == "amzn" || $ID == "ol" ]]; then
@@ -37,6 +38,7 @@ configure() {
 	rm -rf /usr/local/smokeping/htdocs/data/*
 }
 
+systemctl stop smokeping
 install_packages
 get_info
 configure
